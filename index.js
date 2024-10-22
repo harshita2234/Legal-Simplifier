@@ -8,7 +8,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Initialize Groq API with hardcoded API key
-const groq = new Groq({ apiKey: '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' });
+const groq = new Groq({ apiKey: 'gsk_123456789addyourshere' });
 
 // Function to strip markdown-style formatting (like **bold** or _italic_)
 function stripMarkdown(text) {
