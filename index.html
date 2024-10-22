@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Document Simplifier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.7);
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #80cbc4;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex-grow: 1;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        button.simplify {
+            background-color: #4caf50;
+        }
+
+        button.tone {
+            background-color: #ffeb3b;
+            color: black;
+        }
+
+        button.terminology {
+            background-color: #ff9800;
+        }
+
+        #simplifiedText {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Legal Document Simplifier</h1>
+        <textarea id="documentInput" rows="10" placeholder="Paste your legal document here"></textarea>
+
+        <div class="button-container">
+            <button class="simplify" onclick="simplifyDocument()">Simplify Legal Document</button>
+            <button class="tone" onclick="analyzeTone()">Tone Analysis and Suggestions</button>
+            <button class="terminology" onclick="explainTerminology()">Legal Terminology Explanation</button>
+        </div>
+
+        <div id="loader" class="loader hidden"></div>
+
+        <div id="simplifiedText"></div>
+    </div>
+
+    <script>
+        async function simplifyDocument() {
+            const text = document.getElementById('documentInput').value;
+            const loader = document.getElementById('loader');
+            const simplifiedTextDiv = document.getElementById('simplifiedText');
+
+            simplifiedTextDiv.innerHTML = '';
+            loader.classList.remove('hidden');
+
+            try {
+                const response = await fetch('http://localhost:3000/simplify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text }),
+                });
+
+                const data = await response.json();
+                simplifiedTextDiv.innerHTML = `<h3>Simplified Document:</h3><p>${data.simplifiedText}</p>`;
+            } catch (error) {
+                simplifiedTextDiv.innerHTML = '<p style="color:red;">Error simplifying the document.</p>';
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        async function analyzeTone() {
+            const text = document.getElementById('documentInput').value;
+            const loader = document.getElementById('loader');
+            const simplifiedTextDiv = document.getElementById('simplifiedText');
+
+            simplifiedTextDiv.innerHTML = '';
+            loader.classList.remove('hidden');
+
+            try {
+                const response = await fetch('http://localhost:3000/tone-analysis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text }),
+                });
+
+                const data = await response.json();
+                simplifiedTextDiv.innerHTML = `<h3>Tone Analysis:</h3><p>${data.toneAnalysis}</p>`;
+            } catch (error) {
+                simplifiedTextDiv.innerHTML = '<p style="color:red;">Error analyzing the tone.</p>';
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        async function explainTerminology() {
+            const text = document.getElementById('documentInput').value;
+            const loader = document.getElementById('loader');
+            const simplifiedTextDiv = document.getElementById('simplifiedText');
+
+            simplifiedTextDiv.innerHTML = '';
+            loader.classList.remove('hidden');
+
+            try {
+                const response = await fetch('http://localhost:3000/explain-terminology', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text }),
+                });
+
+                const data = await response.json();
+                simplifiedTextDiv.innerHTML = `<h3>Legal Terminology Explanation:</h3><p>${data.terminologyExplanation}</p>`;
+            } catch (error) {
+                simplifiedTextDiv.innerHTML = '<p style="color:red;">Error explaining the terminology.</p>';
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>
