@@ -53,7 +53,13 @@ async function explainTerminology(text) {
         model: 'llama3-8b-8192',
     });
 }
+app.get('/', (req, res) => {
+  res.status(200).json('Welcome to the app');
+});
 
+app.get('/home', (req, res) => {
+  res.status(200).json('Welcome, your app is working well');
+});
 // Simplify legal document route
 app.post('/simplify', async (req, res) => {
     const { text } = req.body;
