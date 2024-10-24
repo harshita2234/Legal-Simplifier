@@ -4,13 +4,7 @@ const cors = require('cors');
 const Groq = require('groq-sdk'); // Import Groq SDK
 
 const app = express();
-app.use(cors(
-    {
-        origin: ["https://legal-simplifier-backend.vercel.app/"],
-        methods: ["POST", "GET"],
-        credentials: true
-    }
-));
+app.use(cors());
 
 app.use(bodyParser.json());
 
